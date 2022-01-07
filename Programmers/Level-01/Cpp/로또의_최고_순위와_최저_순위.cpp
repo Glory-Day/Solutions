@@ -19,7 +19,7 @@ vector<int> solution(vector<int> lottos, vector<int> win_nums) {
     }
 
     // lottos의 번호와 win_nums의 번호가 일치하는만큼 win_count에 1씩 증가시킨다.
-    for(int i = 0; i < lottos.size(); i++) {
+    for (int i = 0; i < lottos.size(); i++) {
         auto iter = find(win_nums.begin(), win_nums.end(), lottos[i]);
         win_count += ((iter != win_nums.end()) ? 1 : 0);
     }
