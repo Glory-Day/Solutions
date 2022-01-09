@@ -57,6 +57,7 @@ def solution(new_id):
     
     return answer
 
+
 if __name__ == "__main__":
     new_id = input('input : ')
     
