@@ -28,6 +28,7 @@ vector<int> solution(int N, vector<int> stages) {
         // 해당 stage의 개수를 센다.
         int stageCount = count(stages.begin(), stages.end(), i);
         // 해당 stage의 개수와 전체 stages의 개수를 나눈다.
+        // 만약 stageCount 또는 stages의 개수들이 0이면 실패율을 0으로 계산한다.
         double percentage = ((stageCount == 0 || length == 0) ? 0 : (double)stageCount / (double)length);
 
         // 해당 stage의 실패율과 stage 번호를 같이 저장한다.
