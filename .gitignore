@@ -3,3 +3,6 @@
 
 # Ignore Debug folder
 Debug/
+
+# Ignore .vscode folder
+.vscode/
