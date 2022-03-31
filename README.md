@@ -1,7 +1,5 @@
-<div align=center><h1>Problem Solutions :100:</h1></div>
-
 <div align="center">
-  <img src="/Resources/Algorithm_logo.png" width="70%" height="70%"/>
+  <img src="/Resources/Algorithm_logo.png"/>
 </div>
 
 ## :trophy: Baekjoon Tier
