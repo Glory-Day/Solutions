@@ -6,6 +6,7 @@ Debug/
 
 # Ignore CodingTest folder
 CodingTest/
+Test/
 
 # Ignore .vscode folder
 .vscode/
