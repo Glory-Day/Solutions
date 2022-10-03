@@ -1,5 +1,12 @@
+# Ignore all code-workspace file
+*.code-workspace
+
 # Ignore Debug folder
 Debug/
+
+# Ignore CodingTest folder
+CodingTest/
+Test/
 
 # Ignore .vscode folder
 .vscode/
