@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/Resources/Algorithm_logo.png"/>
+  <img src="/Resources/Main Image.png"/>
 </div>
 
 ## :trophy: Baekjoon Tier
