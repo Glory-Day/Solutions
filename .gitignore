@@ -1,8 +1,0 @@
-# Ignore Debug folder
-Debug/
-
-# Ignore .vscode folder
-.vscode/
-
-# Ignore "tempCodeRunnerFile.cpp" file
-tempCodeRunnerFile.cpp
