@@ -1,6 +1,3 @@
-# Ignore all code-workspace file
-*.code-workspace
-
 # Ignore Debug folder
 Debug/
 
