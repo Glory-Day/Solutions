@@ -1,0 +1,14 @@
+# Ignore all code-workspace file
+*.code-workspace
+
+# Ignore Debug folder
+Debug/
+
+# Ignore CodingTest folder
+Test/
+
+# Ignore .vscode folder
+.vscode/
+
+# Ignore "tempCodeRunnerFile.cpp" file
+tempCodeRunnerFile.cpp
