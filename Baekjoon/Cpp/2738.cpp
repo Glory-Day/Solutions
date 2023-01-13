@@ -1,14 +1,35 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
+    int n, m;
+    cin >> n >> m;
 
-    for (int i = 1; i <= n; i++) {
-        for (int j = 0; j < i; j++) {
-            cout << '*';
+    vector<vector<int>> map;
+    for (int i = 0; i < n; i++) {
+        vector<int> inputs;
+        for (int j = 0; j < m; j++) {
+            int input;
+            cin >> input;
+            inputs.push_back(input);
+        }
+
+        map.push_back(inputs);
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            int input;
+            cin >> input;
+            map[i][j] += input;
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cout << map[i][j] << ' ';
         }
         cout << '\n';
     }
