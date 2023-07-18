@@ -1,7 +1,3 @@
-<div align="center">
-  <img src="/Resources/Main Image.png"/>
-</div>
-
 ## :trophy: Baekjoon Tier
 [![Solved.ac Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gloryday)](https://solved.ac/gloryday/)
 
