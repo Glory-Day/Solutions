@@ -1,5 +1,6 @@
 <div align="center">
-  <img src="/Resources/Main Image.png"/>
+  <img src="/.resources/Main Image.png"/>
+  <h3>Online Judge Sites<br>Solutions</h3>
 </div>
 
 ## :trophy: Baekjoon Tier
