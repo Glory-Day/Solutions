@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/.resources/Main Image.png"/>
+  <img src="/.resources/thumbnail.png"/>
   <h3>Online Judge Sites<br>Solutions</h3>
 </div>
 
@@ -17,7 +17,7 @@
         Baekjoon Online Judge
       </td>
       <td>
-        <img src="/.resources/Baekjoon.png"/>
+        <img src="/.resources/baekjoon_logo.png"/>
       </td>
     </tr>
     <tr>
@@ -25,7 +25,7 @@
         Codeforces
       </td>
       <td>
-        <img src="/.resources/Codeforces.png"/>
+        <img src="/.resources/codeforces_logo.png"/>
       </td>
     </tr>
     <tr>
@@ -33,7 +33,7 @@
         Leetcode
       </td>
       <td>
-        <img src="/.resources/Leetcode.png"/>
+        <img src="/.resources/leetcode_logo.png"/>
       </td>
     </tr>
     <tr>
@@ -41,7 +41,7 @@
         Programmers
       </td>
       <td>
-        <img src="/.resources/Programmers.png"/>
+        <img src="/.resources/programmers_logo.png"/>
       </td>
     </tr>
   </table>
