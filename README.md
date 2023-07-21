@@ -28,7 +28,7 @@
     </tr>
     <tr>
       <td align="center">
-        Leetcode
+        <a href="https://github.com/Glory-Day/Solutions/tree/leetcode">Leetcode</a>
       </td>
       <td>
         <img src="/.resources/leetcode_logo.png"/>
