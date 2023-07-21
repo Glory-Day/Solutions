@@ -1,9 +1,7 @@
 <div align="center">
   <img src="/.resources/thumbnail.png"/>
-  <h3>Online Judge Sites<br>Solutions</h3>
+  <h1>Online Judge Sites<br>Solutions</h3>
 </div>
-
-<br><br><br><br>
 
 <div align="center">
   <table>
