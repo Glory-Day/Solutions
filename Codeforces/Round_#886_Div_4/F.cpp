@@ -12,26 +12,31 @@ int main() {
     cin >> t;
 
     while (t--) {
-        int n;
+        ll n;
         cin >> n;
 
         vector<int> cnt(n + 1, 0);
+        vector<int> mx(n + 1, 0);
         for (int i = 0; i < n; i++) {
-            int input;
+            ll input;
             cin >> input;
 
             if (input > n) {
                 continue;
             }
 
-            for (int j = input; j <= n; j += input) {
-                cnt[j]++;
+            cnt[input]++;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = i; j <= n; j += i) {
+                mx[j] += cnt[i];
             }
         }
 
         int answer = -1;
         for (int i = 1; i <= n; i++) {
-            answer = max(answer, cnt[i]);
+            answer = max(answer, mx[i]);
         }
 
         cout << answer << '\n';
