@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/.resources/leetcode_logo.png"/>
+  <img src="/.resource/leetcode_logo.png"/>
 </div>
 
 # Problems
