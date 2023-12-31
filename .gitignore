@@ -10,6 +10,7 @@
 #  ____________________________________________
 
 tempCodeRunnerFile.cpp
+tempCodeRunnerFile.exe
 
 
 #   ________ ______  __       _______  ________ _______   ______  
@@ -25,6 +26,7 @@ tempCodeRunnerFile.cpp
 
 .backup/
 .vscode/
+**/Debug/
 Test/
 
 
