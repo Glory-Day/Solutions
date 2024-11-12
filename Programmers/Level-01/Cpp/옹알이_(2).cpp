@@ -10,10 +10,13 @@ int solution(vector<string> babbling) {
 
     string cache[4] = { "aya","ye","woo","ma" };
 
-    for (int i = 0; i < babbling.size(); i++) {
-        for (int j = 0; j < 4; j++) {
+    for (int i = 0; i < (int)babbling.size(); i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
             size_t pos = 0;
-            while ((pos = babbling[i].find(cache[j], pos)) != string::npos) {
+            while ((pos = babbling[i].find(cache[j], pos)) != string::npos)
+            {
                 babbling[i].replace(pos, cache[j].length(), "*");
                 pos += 2;
             }
@@ -21,9 +24,12 @@ int solution(vector<string> babbling) {
 
         answer++;
 
-        for (int j = 0; j < babbling[i].size(); j++) {
-            if (babbling[i][j] != '*') {
+        for (int j = 0; j < (int)babbling[i].size(); j++)
+        {
+            if (babbling[i][j] != '*')
+            {
                 answer--;
+                
                 break;
             }
         }
@@ -40,10 +46,13 @@ int main() {
     for (int i = 0; i < n; i++) {
         string input;
         cin >> input;
+        
         babbling.push_back(input);
     }
 
     int answer = solution(babbling);
 
     cout << answer;
+    
+    return 0;
 }
