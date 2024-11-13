@@ -27,6 +27,8 @@ tempCodeRunnerFile.exe
 .backup/
 .vscode/
 **/Debug/
+**/bin/
+**/obj/
 Test/
 
 
@@ -42,4 +44,5 @@ Test/
 #  _________________________________________________________________________________________
 
 *.code-workspace
+*.csproj
 
