@@ -1,24 +1,28 @@
 #include <iostream>
-
-#define MAX 100000001;
+#include <climits>
+#include <cmath>
 
 using namespace std;
 
-int cache[1000001];
-
-int main() {
+int main()
+{
     int n;
     cin >> n;
-
-    cache[2] = cache[3] = 1;
-
-    for (int i = 4; i <= n; i++) {
-        int a = (i % 3 == 0) ? cache[i / 3] : MAX;
-        int b = (i % 2 == 0) ? cache[i / 2] : MAX;
-        int c = cache[i - 1];
-
-        cache[i] = min(a, min(b, c)) + 1;
+	
+	int caches[(int)1e6 + 1];
+    caches[2] = 1;
+    caches[3] = 1;
+	
+    for (int i = 4; i <= n; i++)
+    {
+        int a = (i % 3 == 0) ? caches[i / 3] : INT_MAX;
+        int b = (i % 2 == 0) ? caches[i / 2] : INT_MAX;
+        int c = caches[i - 1];
+		
+        caches[i] = min(a, min(b, c)) + 1;
     }
-
-    cout << cache[n];
+	
+    cout << caches[n];
+	
+	return 0;
 }

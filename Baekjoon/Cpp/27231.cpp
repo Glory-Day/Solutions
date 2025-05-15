@@ -8,83 +8,101 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-
+	
     int n;
     cin >> n;
-
-    vector<string> arr;
-    for (int i = 0; i < n; i++) {
-        string input;
-        cin >> input;
-        arr.push_back(input);
+	
+    vector<string> arr(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
     }
-
+	
     set<int> st;
     vector<string> subs;
-    function<void(string&, int)> dfs = [&](string& num, int level) {
-        int size = num.size();
-        if (level == size) {
+    function<void(string&, int)> dfs = [&](string& num, int level)
+    {
+        int size = (int)num.size();
+        if (level == size)
+        {
             int sum = 0;
-            for (auto& sub: subs) {
+            for (auto& sub: subs)
+            {
                 sum += stoi(sub);
             }
-
+			
             st.insert(sum);
         }
         
-        for (int j = size - 1; j >= level; j--) {
-            string tmp = num.substr(level, j - level + 1);
+        for (int i = size - 1; i >= level; i--)
+        {
+            string tmp = num.substr(level, i - level + 1);
             subs.push_back(tmp);
-            dfs(num, j + 1);
+            
+            dfs(num, i + 1);
+            
             subs.pop_back();
         }
     };
-
+	
     vector<int> checks;
     int answer = 0;
-    for (int i = 0; i < arr.size(); i++) {
-        int size = arr[i].size();
+    for (int i = 0; i < n; i++)
+    {
+        int size = (int)arr[i].size();
         bool chk = true;
-        for (int k = 0; k < size; k++) {
-            if (arr[i][k] - '0' >= 2) {
+        for (int k = 0; k < size; k++)
+        {
+            if (arr[i][k] - '0' >= 2)
+            {
                 chk = false;
+                
                 break;
             }
         }
-
-        if (chk) {
+		
+        if (chk)
+        {
             cout << "Hello, BOJ 2023!\n";
+            
             continue;
         }
-
+		
         dfs(arr[i], 0);
-
+		
         int j = 1;
         long long mx = *(--st.end());
-        while (true) {
+        while (true)
+        {
             long long sum = 0;
-            for (int k = 0; k < arr[i].size(); k++) {
+            for (int k = 0; k < (int)arr[i].size(); k++)
+            {
                 sum += pow(arr[i][k] - '0', j);
             }
-
-            if (sum > mx) {
+			
+            if (sum > mx)
+            {
                 break;
             }
-
-            if (st.find(sum) != st.end()) {
+			
+            if (st.find(sum) != st.end())
+            {
                 answer++;
             }
-
+			
             j++;
         }
-
+		
         cout << answer << '\n';
-
+		
         st.clear();
         answer = 0;
     }
+	
+	return 0;
 }

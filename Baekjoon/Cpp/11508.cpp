@@ -1,37 +1,32 @@
 #include <iostream>
-#include <deque>
+#include <vector>
 #include <algorithm>
-#include <functional>
 
 using namespace std;
 
-typedef long long ll;
-
-int main() {
+int main()
+{
     int n;
     cin >> n;
-
-    deque<int> dq;
-    for (int i = 0; i < n; i++) {
-        int input;
-        cin >> input;
-        dq.push_back(input);
+	
+	long long answer = 0LL;
+	
+    vector<int> v(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> v[i];
+		
+		answer += v[i];
     }
-
-    sort(dq.begin(), dq.end(), greater<int>());
-
-    ll answer = 0;
-    while (dq.size() >= 3) {
-        answer += dq[0] + dq[1];
-        dq.pop_front();
-        dq.pop_front(); 
-        dq.pop_front();
+	
+    sort(v.begin(), v.end());
+	
+    for (int i = n - 3; i >= 0; i -= 3)
+    {
+	    answer -= v[i];
     }
-
-    while (!dq.empty()) {
-        answer += dq.front();
-        dq.pop_front();
-    }
-
+	
     cout << answer;
+	
+	return 0;
 }

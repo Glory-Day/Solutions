@@ -1,48 +1,39 @@
 #include <iostream>
 #include <climits>
-#include <vector>
-#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
-int cache[1000001];
-int map[1000001];
+int caches[(int)1e6 + 1];
+int visited[(int)1e6 + 1];
 
-int f(int n) {
-    if (n <= 0) return INT_MAX;
-    if (cache[n]) return cache[n];
-
-    int a = (n % 3 == 0) ? f(n / 3) : INT_MAX;
-    int b = (n % 2 == 0) ? f(n / 2) : INT_MAX;
-    int c = f(n - 1);
-
-    int mn;
-    if (a < b) {
-        if (a < c) mn = a, map[n] = n / 3;
-        else mn = c, map[n] = n - 1;
-    }
-    else {
-        if (b < c) mn = b, map[n] = n / 2;
-        else mn = c, map[n] = n - 1;
-    }
-
-    return cache[n] = mn + 1;
-}
-
-int main() {
+int main()
+{
     int n;
     cin >> n;
-
-    cache[1] = 1;
-    map[1] = 1;
-
-    int answer = f(n);
-    cout << answer - 1 << '\n';
-
-    int nd = n;
-    while (nd != 1) {
-        cout << nd << ' ';
-        nd = map[nd];
+	
+    caches[2] = visited[2] = 1;
+    caches[3] = visited[3] = 1;
+	
+    for (int i = 4; i <= n; i++)
+    {
+        int a = (i % 3 == 0) ? caches[i / 3] : INT_MAX;
+        int b = (i % 2 == 0) ? caches[i / 2] : INT_MAX;
+        int c = caches[i - 1];
+		
+		(a < b) && (a < c) ? (caches[i] = a, visited[i] = i / 3) : (b < c) ? (caches[i] = b, visited[i] = i / 2) : (caches[i] = c, visited[i] = i - 1);
+		
+	    caches[i]++;
     }
-    cout << nd << ' ';
+	
+    cout << caches[n] << '\n';
+    
+    while (n != 0)
+    {
+        cout << n << ' ';
+        
+        n = visited[n];
+    }
+	
+	return 0;
 }

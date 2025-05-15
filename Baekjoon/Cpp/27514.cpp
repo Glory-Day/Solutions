@@ -1,73 +1,37 @@
 #include <iostream>
-#include <string>
-#include <queue>
-#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
-struct BigInteger {
-    string number;
-
-    BigInteger(string _number) : number(_number) {}
-
-    bool operator<(const BigInteger a) const {
-        if (this->number.size() == a.number.size()) {
-            return this->number[0] > a.number[0];
-        }
-
-        return this->number.size() > a.number.size();
-    }
-};
-
-string sum(string a, string b) {
-    string c = "";
-    int sum = 0;
-    while (!a.empty() || !b.empty() || sum) {
-        if (!a.empty()) {
-            sum += a.back() - '0';
-            a.pop_back();
-        }
-
-        if (!b.empty()) {
-            sum += b.back() - '0';
-            b.pop_back();
-        }
-
-        c.push_back((sum % 10) + '0');
-        sum /= 10;
-    }
-
-    reverse(c.begin(), c.end());
-    return c;
-}
-
-int main() {
+int main()
+{
     int n;
     cin >> n;
-    
-    priority_queue<BigInteger> pq;
-    for (int i = 0; i < n; i++) {
-        string input;
-        cin >> input;
-        if (input != "0") {
-            pq.push(BigInteger(input));
+	
+    int caches[64] = { 0, };
+    for (int i = 0; i < n ; i++)
+    {
+        long long a;
+        cin >> a;
+		
+        if (a > 0)
+        {
+            caches[(int)log2l((long double)a)]++;
         }
     }
-
-    while (pq.size() != 1) {
-        BigInteger a = pq.top();
-        pq.pop();
-        BigInteger b = pq.top();
-        pq.pop();
-
-        if (a.number == b.number) {
-            pq.push(sum(a.number, b.number));
-        }
-        else {
-            pq.push(b);
+	
+    int index = 0;
+    for (int i = 0; i < 63; i++)
+    {
+        caches[i + 1] += caches[i] / 2;
+		
+        if (caches[i + 1] > 0)
+        {
+            index = i + 1;
         }
     }
-
-    string answer = pq.top().number;
-    cout << answer;
+	
+    cout << (1LL << index);
+	
+    return 0;
 }
