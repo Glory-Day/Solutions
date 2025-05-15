@@ -4,29 +4,27 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     int n;
     cin >> n;
-
-    vector<int> v;
-    for (int i = 0; i < n; i++) {
-        int input;
-        cin >> input;
-        v.push_back(input);
+	
+    vector<int> p(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> p[i];
     }
-
-    sort(v.begin(), v.end());
-
-    int sum = 0;
-    for (int& i: v) {
-        sum += i;
+	
+    sort(p.begin(), p.end());
+	
+	int answer = p[0];
+    for (int i = 0; i < n - 1; i++)
+    {
+        p[i + 1] += p[i];
+        answer += p[i + 1];
     }
-
-    int answer = sum;
-    for (int i = n - 1; i >= 1; i--) {
-        sum -= v[i];
-        answer += sum;
-    }
-
+	
     cout << answer;
+	
+	return 0;
 }

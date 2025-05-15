@@ -1,19 +1,25 @@
 #include <iostream>
 
+#define MOD 10007
+
 using namespace std;
 
-int cache[1001];
+int caches[(int)1e3 + 1];
 
-int main() {
+int main()
+{
     int n;
     cin >> n;
-
-    cache[1] = 1;
-    cache[2] = 3;
-
-    for (int i = 3; i <= n; i++) {
-        cache[i] = (cache[i - 1] + cache[i - 2] * 2) % 10007;
-    }
-
-    cout << cache[n];
+	
+    caches[1] = 1;
+    caches[2] = 3;
+	
+	for (int i = 3; i <= n; i++)
+	{
+		caches[i] = (caches[i - 1] + 2 * caches[i - 2]) % MOD;
+	}
+	
+    cout << caches[n];
+    
+	return 0;
 }

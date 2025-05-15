@@ -10,27 +10,31 @@ typedef pair<int, string> pis;
 string direction = "DSLR";
 bool visited[10000];
 
-string bfs(int b, int e) {
+string bfs(int b, int e)
+{
     string ps;
     queue<pis> q;
     q.push({ b,"" });
-
+	
     visited[b] = true;
-
-    while (!q.empty()) {
-        pis nd = q.front();
-
+	
+    while (!q.empty())
+    {
+        pis nd = q.front();	
         q.pop();
-
-        if (nd.first == e) {
+		
+        if (nd.first == e)
+        {
             ps = nd.second;
-            break;
+	        
+			break;
         }
-
-        for (char& i: direction) {
-            int nnd = 0;
-
-            switch (i) {
+		
+        for (char& i: direction)
+        {
+            int nnd = 0;	
+            switch (i)
+            {
                 case 'D':
                     nnd = (nd.first * 2) % 10000;
                     break;
@@ -44,28 +48,34 @@ string bfs(int b, int e) {
                     nnd = (nd.first % 10) * 1000 + (nd.first / 10);
                     break;
             }
-
-            if (!visited[nnd]) {
+			
+            if (!visited[nnd])
+            {
                 visited[nnd] = true;
                 q.push({ nnd,nd.second + i });
             }
         }
     }
-
+	
     return ps;
 }
 
-int main() {
+int main()
+{
     int t;
     cin >> t;
-
-    while (t--) {
+	
+    while (t--)
+    {
         int a, b;
         cin >> a >> b;
-
+		
         fill(visited, visited + 10000, false);
-
+		
         string answer = bfs(a, b);
+        
         cout << answer << '\n';
     }
+	
+	return 0;
 }
