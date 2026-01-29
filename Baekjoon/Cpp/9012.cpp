@@ -1,35 +1,48 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
-int main() {
+int main()
+{
     int n;
     cin >> n;
-    for (int i = 0; i < n; i++) {
+
+    for (int i = 0; i < n; i++)
+    {
         string s;
         cin >> s;
 
         bool check = true;
-        vector<char> v;
-        for(char& j: s) {
-            if (j == '(') {
-                v.push_back(j);
+        int count = 0;
+        for(char& j: s)
+        {
+            if (j == '(')
+            {
+                count++;
             }
-            else {
-                if (v.empty()) {
+            else
+            {
+                if (count == 0)
+                {
                     check = false;
                     break;
                 }
-                else v.pop_back();
+                else
+                {
+                    count--;
+                }
             }
         }
 
-        if (check && v.empty()) {
+        if (check && count == 0)
+        {
             cout << "YES\n";
         }
-        else {
+        else
+        {
             cout << "NO\n";
         }
     }

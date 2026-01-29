@@ -1,37 +1,42 @@
 #include <iostream>
-#include <cmath>
+
+#define FAST_IO ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
 using namespace std;
 
+inline unsigned long long floor(const unsigned long long x)
+{
+    if (x == 0ULL)
+    {
+        return 0ULL;
+    }
+
+    unsigned long long p = 1ULL;
+    while (p <= x / 2ULL)
+    {
+        p <<= 1ULL;
+    }
+
+    return p;
+}
+
 int main()
 {
+    FAST_IO;
+
     int n;
     cin >> n;
-	
-    int caches[64] = { 0, };
-    for (int i = 0; i < n ; i++)
+
+    unsigned long long cache = 0ULL;
+    for (int i = 0; i < n; i++)
     {
-        long long a;
-        cin >> a;
-		
-        if (a > 0)
-        {
-            caches[(int)log2l((long double)a)]++;
-        }
+        unsigned long long x;
+        cin >> x;
+
+        cache += x;
     }
-	
-    int index = 0;
-    for (int i = 0; i < 63; i++)
-    {
-        caches[i + 1] += caches[i] / 2;
-		
-        if (caches[i + 1] > 0)
-        {
-            index = i + 1;
-        }
-    }
-	
-    cout << (1LL << index);
+
+    cout << floor(cache);
 	
     return 0;
 }

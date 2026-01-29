@@ -1,29 +1,41 @@
 #include <iostream>
-#include <algorithm>
+#include <cmath>
 #include <climits>
+#include <vector>
+
+#define FAST_IO ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
 using namespace std;
 
-typedef long long ll;
+int main()
+{
+    FAST_IO;
 
-ll arr1[100001], arr2[100001];
-
-int main() {
     int n;
     cin >> n;
-    for (int i = 0; i < n - 1; i++) {
-        cin >> arr1[i];
-    }
-    for (int i = 0; i < n; i++) {
-        cin >> arr2[i];
+
+    vector<long long> v(n - 1);
+    vector<long long> w(n);
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        cin >> v[i];
     }
 
-    ll answer = 0;
-    ll mn = INT_MAX;
-    for (int i = 0; i < n - 1; i++) {
-        mn = min(mn, arr2[i]);
-        answer += (mn * arr1[i]);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> w[i];
+    }
+
+    long long answer = 0LL;
+    long long cache = LLONG_MAX;
+    for (int i = 0; i < n - 1; i++)
+    {
+        cache = min(cache, w[i]);
+        answer += (cache * v[i]);
     }
 
     cout << answer;
+
+    return 0;
 }
