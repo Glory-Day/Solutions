@@ -1,25 +1,27 @@
 #include <iostream>
-
-#define MOD 10007
+#include <vector>
 
 using namespace std;
 
-typedef long long ll;
-
-ll cache[1001][1001];
-
-ll f(int n, int k) {
-    if (cache[n][k]) return cache[n][k];
-    else if (k > n) return 0;
-    else if (k == 0 || k == n) return 1;
-    return cache[n][k] = (f(n - 1, k - 1) + f(n - 1, k)) % MOD;
-}
-
-int main() {
+int main()
+{
     int n, k;
     cin >> n >> k;
 
-    cache[0][0] = cache[1][0] = cache[0][1] = 1;
+    n += 2;
 
-    cout << f(n, k);
+    vector<int> cache(n + 1, 0);
+    cache[1] = 1;
+
+    for (int i = 2; i <= n; i++)
+    {
+        for (int j = i / 2; j > 0; j--)
+        {
+            cache[i - j] = cache[j] = (cache[j - 1] + cache[j]) % 10007;
+        }
+    }
+
+    cout << cache[k + 1];
+
+    return 0;
 }
