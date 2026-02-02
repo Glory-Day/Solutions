@@ -2,100 +2,77 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <utility>
 #include <algorithm>
 
 using namespace std;
 
-typedef pair<int, int> pii;
-
-typedef struct _SNode {
-    int index;
-    int play;
-
-    bool operator<(const _SNode& o) const {
-        if (play == o.play) return index < o.index;
-        return play > o.play;
-    }
-} SNode;
-
-typedef struct _Node {
-    string genre;
-    int total_plays;
-
-    vector<SNode> nodes;
-
-    bool operator<(const _Node& o) {
-        return total_plays > o.total_plays;
-    }
-} Node;
-
-vector<int> solution(vector<string> genres, vector<int> plays) {
+vector<int> solution(vector<string> genres, vector<int> plays)
+{
     vector<int> answer;
 
-    map<string, vector<pii>> mp;
-    for (int i = 0; i < genres.size(); i++) {
-        if (mp.find(genres[i]) != mp.end()) {
-            mp[genres[i]].push_back({ i,plays[i] });
-        }
-        else {
-            mp[genres[i]] = { { i,plays[i] } };
-        }
+    map<string, int> temp;
+    map<string, vector<pair<int, int>>> mp;
+    
+    int size = (int)genres.size();
+    for (int i = 0; i < size; i++)
+    {
+        temp[genres[i]] += plays[i];
+        mp[genres[i]].push_back({plays[i], i});
+    }
+    
+    vector<pair<int, string>> caches;
+    for (auto& i : temp)
+    {
+        caches.push_back({ i.second,i.first });
     }
 
-    vector<Node> nds;
-    for (auto it = mp.begin(); it != mp.end(); it++) {
-        int total_plays = 0;
-        vector<SNode> snds;
-        for (int i = 0; i < (*it).second.size(); i++) {
-            total_plays += (*it).second[i].second;
-            snds.push_back({ (*it).second[i].first,(*it).second[i].second });
-        }
+    sort(caches.begin(), caches.end(), greater<pair<int, string>>());
+    
+    auto compare = [&](const pair<int, int>& lhs, const pair<int, int>& rhs)
+    {
+        return lhs.first != rhs.first ? lhs.first > rhs.first : lhs.second < rhs.second;
+    };
 
-        sort(snds.begin(), snds.end());
-
-        nds.push_back({ (*it).first,total_plays,snds });
-    }
-
-    sort(nds.begin(), nds.end());
-
-    for (auto& i: nds) {
-        if (i.nodes.size() <= 2) {
-            for (int j = 0; j < i.nodes.size(); j++) {
-                answer.push_back(i.nodes[j].index);
-            }
-        }
-        else {
-            for (int j = 0; j < 2; j++) {
-                answer.push_back(i.nodes[j].index);
-            }
+    for (auto& cache : caches)
+    {
+        string key = cache.second;
+        vector<pair<int, int>>& songs = mp[key];
+        
+        sort(songs.begin(), songs.end(), compare);
+        
+        int count = min(2, (int)songs.size());
+        for (int i = 0; i < count; i++)
+        {
+            answer.push_back(songs[i].second);
         }
     }
-
+    
     return answer;
 }
 
-int main() {
+int main()
+{
     int n;
     cin >> n;
 
-    vector<string> genres;
-    for (int i = 0; i < n; i++) {
-        string input;
-        cin >> input;
-        genres.push_back(input);
+    vector<string> genres(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> genres[i];
     }
 
-    vector<int> plays;
-    for (int i = 0; i < n; i++) {
-        int input;
-        cin >> input;
-        plays.push_back(input);
+    vector<int> plays(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> plays[i];
     }
 
     vector<int> answer = solution(genres, plays);
 
-    for (auto& i: answer) {
+    for (auto& i: answer)
+    {
         cout << i << ' ';
     }
+
+    return 0;
 }
