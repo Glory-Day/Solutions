@@ -1,41 +1,70 @@
 #include <iostream>
-#include <climits>
 #include <string>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
-bool visited[50];
-
-int dfs(string begin, string target, vector<string>& words, int lv) {
-    int answer = INT_MAX;
-
-    if (begin == target) return lv;
-
-    for (int i = 0; i < words.size(); i++) {
-        for (int j = 0; j < words[i].size(); j++) {
-            string temp = begin;
-            temp[j] = words[i][j];
-
-            if (temp == words[i] && !visited[i]) {
-                visited[i] = true;
-                answer = min(answer, dfs(words[i], target, words, lv + 1));
-                visited[i] = false;
-            }
+bool valid(const string& from, const string& to)
+{
+    int count = 0;
+    for (int i = 0; i < (int)from.length(); i++)
+    {
+        if (from[i] != to[i])
+        {
+            count++;
         }
     }
 
-    return answer;
+    return count == 1;
 }
 
-int solution(string begin, string target, vector<string> words) {
-    int answer = 0;
+int solution(string begin, string target, vector<string> words)
+{
+    bool existed = false;
+    for (const string& word : words)
+    {
+        if (word == target)
+        {
+            existed = true;
 
-    answer = dfs(begin, target, words, 0);
+            break;
+        }
+    }
+    
+    if (existed == false)
+    {
+        return 0;
+    }
+    
+    int size = words.size();
+    vector<int> visited(size, false);
+    queue<pair<string, int>> q;
+    
+    q.push({ begin,0 });
+    
+    while (q.empty() == false)
+    {
+        auto node = q.front();
+        q.pop();
+        
+        if (node.first == target)
+        {
+            return node.second;
+        }
+        
+        for (int i = 0; i < size; i++)
+        {
+            if (visited[i] == false && valid(node.first, words[i]))
+            {
+                q.push({words[i], node.second + 1});
 
-    if (answer == INT_MAX) answer = 0;
-
-    return answer;
+                visited[i] = true;
+            }
+        }
+    }
+    
+    return 0;
 }
 
 int main() {
@@ -45,14 +74,15 @@ int main() {
     int n;
     cin >> n;
 
-    vector<string> words;
-    for (int i = 0; i < n; i++) {
-        string input;
-        cin >> input;
-        words.push_back(input);
+    vector<string> words(n);
+    for (int i = 0; i < n; i++)
+    {
+        cin >> words[i];
     }
 
     int answer = solution(begin, target, words);
 
-    cout << answer;
+    cout << answer << '\n';
+
+    return 0;
 }
