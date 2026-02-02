@@ -1,69 +1,82 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <algorithm>
+#include <cstring>
 
 using namespace std;
 
-vector<int> map[20001];
-int visited[20001];
-
-int bfs() {
+int solution(int n, vector<vector<int>> edge) 
+{
+    vector<vector<int>> graph(n + 1);
+    
+    for (auto& e : edge) 
+    {
+        int u = e[0];
+        int v = e[1];
+        
+        graph[u].push_back(v);
+        graph[v].push_back(u);
+    }
+    
     queue<int> q;
+    vector<int> distances(n + 1, -1);
+    
     q.push(1);
-    visited[1] = 1;
-
-    while(!q.empty()) {
-        int nd = q.front();
+    distances[1] = 0;
+    
+    while (q.empty() == false) 
+    {
+        int u = q.front();
         q.pop();
-
-        for (int& i: map[nd]) {
-            if (!visited[i]) {
-                visited[i] = visited[nd] + 1;
-                q.push(i);
+        
+        for (int node : graph[u]) 
+        {
+            if (distances[node] == -1) 
+            {
+                distances[node] = distances[u] + 1;
+                q.push(node);
             }
         }
     }
-
-    sort(visited, visited + 20001);
-
-    int cnt = 1;
-    int mx = visited[20000];
-    for (int i = 20000 - 1; i >= 0; i--) {
-        if (visited[i] < mx) break;
-        cnt++;
+    
+    int cache = 0;
+    for (int i = 1; i <= n; i++) 
+    {
+        if (distances[i] > cache) 
+        {
+            cache = distances[i];
+        }
     }
-    return cnt;
-}
-
-int solution(int n, vector<vector<int>> edge) {
+    
     int answer = 0;
-
-    for (vector<int>& i: edge) {
-        map[i[0]].push_back(i[1]);
-        map[i[1]].push_back(i[0]);
+    for (int i = 1; i <= n; i++) 
+    {
+        if (distances[i] == cache) 
+        {
+            answer++;
+        }
     }
-
-    answer = bfs();
-
+    
     return answer;
 }
 
-int main() {
+int main()
+{
     int n;
     cin >> n;
 
     int m;
     cin >> m;
 
-    vector<vector<int>> edge;
-    for (int i = 0; i < m; i++) {
-        int a, b;
-        cin >> a >> b;
-        edge.push_back({ a,b });
+    vector<vector<int>> edge(m, vector<int>(2));
+    for (int i = 0; i < m; i++)
+    {
+        cin >> edge[i][0] >> edge[i][1];
     }
 
     int answer = solution(n, edge);
 
     cout << answer;
+
+    return 0;
 }
