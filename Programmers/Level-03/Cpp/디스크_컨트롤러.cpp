@@ -1,51 +1,79 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <utility>
 #include <algorithm>
 
 using namespace std;
 
-typedef pair<int, int> pii;
+struct Job
+{
+    int time;
+    int duration;
 
-int solution(vector<vector<int>> jobs) {
+    bool operator()(const Job& lhs, const Job& rhs)
+    {
+        return lhs.duration > rhs.duration;
+    }
+};
+
+int solution(vector<vector<int>> jobs)
+{
     int answer = 0;
 
-    priority_queue<pii> pq;
+    int size = jobs.size();
+    
     sort(jobs.begin(), jobs.end());
+    
+    priority_queue<Job, vector<Job>, Job> pq;
+    
+    int index = 0;
+    int duration = 0;
 
-    for (int i = 0, j = 0; i < jobs.size() || !pq.empty();) {
-        if (i < jobs.size() && j >= jobs[i][0]) {
-            pq.push({ -jobs[i][1],jobs[i][0] });
-            i++;
-            continue;
+    int completed = 0;
+    while (completed < size)
+    {
+        while (index < size && jobs[index][0] <= duration)
+        {
+            pq.push({jobs[index][0], jobs[index][1]});
+            
+            index++;
         }
-
-        if (!pq.empty()) {
-            j -= pq.top().first;
-            answer += j - pq.top().second;
+        
+        if (pq.empty() == false)
+        {
+            Job node = pq.top();
             pq.pop();
+            
+            duration += node.duration;
+            answer += duration - node.time;
+            
+            completed++;
         }
-        else {
-            j = jobs[i][0];
+        else
+        {
+            duration = jobs[index][0];
         }
     }
 
-    return answer / jobs.size();
+    answer /= size;
+    
+    return answer;
 }
 
-int main() {
+int main()
+{
     int n;
     cin >> n;
 
-    vector<vector<int>> jobs;
-    for (int i = 0; i < n; i++) {
-        int a, b;
-        cin >> a >> b;
-        jobs.push_back({ a,b });
+    vector<vector<int>> jobs(n, vector<int>(2));
+    for (int i = 0; i < n; i++)
+    {
+        cin >> jobs[i][0] >> jobs[i][1];
     }
 
     int answer = solution(jobs);
 
-    cout << answer;
+    cout << answer << '\n';
+
+    return 0;
 }
