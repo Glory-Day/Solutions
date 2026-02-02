@@ -1,42 +1,51 @@
 #include <iostream>
-#include <string>
 #include <vector>
 
 using namespace std;
 
-int solution(int m, int n, vector<vector<int>> puddles) {
+int solution(int m, int n, vector<vector<int>> puddles) 
+{
     int answer = 0;
 
-    vector<vector<int>> map(n+1, vector<int>(m+1, 1));
-    for (int i = 0; i < puddles.size(); i++) {
-        int x = puddles[i][0];
-        int y = puddles[i][1];
+    const int P = 1000000007;
 
-        map[y][x] = 0;
+    vector<vector<int>> caches(n + 1, vector<int>(m + 1, 0));
+    
+    for (const auto& puddle : puddles) 
+    {
+        int x = puddle[0];
+        int y = puddle[1];
 
-        if (x == 1) {
-            for (int j = y; j <= n; j++) {
-                map[j][1] = 0;
+        caches[y][x] = -1;
+    }
+    
+    caches[1][1] = 1;
+    
+    for (int i = 1; i <= n; i++) 
+    {
+        for (int j = 1; j <= m; j++) 
+        {
+            if (caches[i][j] == -1) 
+            {
+                caches[i][j] = 0;
+
+                continue;
             }
-        }
-
-        if (y == 1) {
-            for (int j = x; j <= m; j++) {
-                map[1][j] = 0;
+            
+            if (i == 1 && j == 1) 
+            {
+                continue;
             }
+            
+            int a = (i > 1 && caches[i - 1][j] != -1) ? caches[i - 1][j] : 0;
+            int b = (j > 1 && caches[i][j - 1] != -1) ? caches[i][j - 1] : 0;
+            
+            caches[i][j] = (a + b) % P;
         }
     }
 
-    for(int y = 2; y <= n; y++) {
-        for(int x = 2; x <= m; x++) {
-            if(!map[y][x]) continue;
-
-            map[y][x] = (map[y - 1][x] + map[y][x - 1]) % 1000000007;
-        }
-    }
-
-    answer = map[n][m];
-
+    answer = caches[n][m];
+    
     return answer;
 }
 
@@ -47,14 +56,15 @@ int main() {
     int k;
     cin >> k;
 
-    vector<vector<int>> puddles;
-    for (int i = 0; i < k; i++) {
-        int a, b;
-        cin >> a >> b;
-        puddles.push_back({ a,b });
+    vector<vector<int>> puddles(k, vector<int>(2));
+    for (int i = 0; i < k; i++)
+    {
+        cin >> puddles[i][0] >> puddles[i][1];
     }
 
     int answer = solution(m, n, puddles);
 
-    cout << answer;
+    cout << answer << '\n';
+
+    return 0;
 }
