@@ -1,41 +1,64 @@
 #include <iostream>
+#include <vector>
 #include <unordered_set>
 
 using namespace std;
 
-int main() {
-    int n, number;
-    cin >> n >> number;
-
+int solution(int N, int number) 
+{
     int answer = -1;
-    
-    unordered_set<int> cache[8];
 
-    int a = 0;
-    for (int i = 0; i < 8; i++) {
-        a = a * 10 + n;
-        cache[i].insert(a);
+    if (N == number) 
+    {
+        return 1;
     }
-
-    for (int i = 1; i < 8; i++) {
-        for (int j = 0; j < i; j++) {
-            for (int a: cache[j]) {
-                for (int b: cache[i - j - 1]) {
-                    cache[i].insert(a + b);
-                    cache[i].insert(a - b);
-                    cache[i].insert(a * b);
-                    if (b != 0) cache[i].insert(a / b);
+    
+    vector<unordered_set<int>> caches(8);
+    
+    int concatenated = 0;
+    for (int i = 0; i < 8; i++) 
+    {
+        concatenated = concatenated * 10 + N;
+        caches[i].insert(concatenated);
+        
+        for (int j = 0; j < i; j++) 
+        {
+            for (int a : caches[j]) 
+            {
+                for (int b : caches[i - j - 1]) 
+                {
+                    caches[i].insert(a + b);
+                    caches[i].insert(a - b);
+                    caches[i].insert(a * b);
+                    
+                    if (b != 0) 
+                    {
+                        caches[i].insert(a / b);
+                    }
                 }
             }
         }
-    }
-
-    for (int i = 0; i < 8; i++) {
-        if (cache[i].find(number) != cache[i].end()) {
-            answer = i + 1;
-            break;
+        
+        if (caches[i].find(number) != caches[i].end()) 
+        {
+            return i + 1;
         }
     }
+    
+    return answer;
+}
 
-    cout << answer;
+int main()
+{
+    int N;
+    cin >> N;
+
+    int number;
+    cin >> number;
+
+    int answer = solution(N, number);
+
+    cout << answer << '\n';
+
+    return 0;
 }
