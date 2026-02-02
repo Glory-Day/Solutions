@@ -1,201 +1,174 @@
 #include <iostream>
-#include <cmath>
 #include <string>
-#include <set>
 #include <vector>
+#include <sstream>
+#include <set>
 #include <algorithm>
 
 using namespace std;
 
-vector<string> split(string input, const string delimiter)
+struct Expression 
 {
-    vector<string> results;
-    
-    int position = 0;
-    while ((size_t)(position = input.find(delimiter)) != string::npos)
-    {
-        results.push_back(input.substr(0, position));
-        
-        input.erase(0, position + delimiter.length());
-    }
-    
-    results.push_back(input);
-    
-    return results;
-}
+    int a, b, c;
+    char op;
+    bool unknown;
+    string original;
+};
 
-const string combine(const vector<string>& v)
+inline int get_maximum_digit(const string& number) 
 {
-    return v[0] + " " + v[1] + " " + v[2] + " " + v[3] + " " + v[4];
-}
+    int result = 0;
+    for (char c : number) 
+    {
+        if (isdigit(c)) 
+        {
+            result = max(result, c - '0');
+        }
+    }
 
-const string add(string a, string b, const int n)
-{
-    string result = "";
-    
-    int mx = (int)max(a.size(), b.size());
-    for (int i = 0; i < mx - (int)a.size(); i++)
-    {
-        a = '0' + a;
-    }
-    
-    for (int i = 0; i < mx - (int)b.size(); i++)
-    {
-        b = '0' + b;
-    }
-    
-    int carry = 0;
-    for (int i = mx - 1; i >= 0; i--)
-    {
-        int sum = (a[i] - '0') + (b[i] - '0') + carry;
-        
-        if (sum >= n)
-        {
-            sum -= n;
-            carry = 1;
-        }
-        else
-        {
-            carry = 0;
-        }
-        
-        result += (sum + '0');
-    }
-    
-    if (carry)
-    {
-        result += (carry + '0');
-    }
-    
-    reverse(result.begin(), result.end());
-    
     return result;
 }
 
-const string substract(string a, string b, const int n)
+int to_decimal(int number, int base) 
 {
-    string result = "";
-    
-    int mx = (int)max(a.size(), b.size());
-    for (int i = 0; i < mx - (int)a.size(); i++)
+    int result = 0;
+    int multiplier = 1;
+    while (number > 0) 
     {
-        a = '0' + a;
+        result += (number % 10) * multiplier;
+        number /= 10;
+
+        multiplier *= base;
     }
-    
-    for (int i = 0; i < mx - (int)b.size(); i++)
-    {
-        b = '0' + b;
-    }
-    
-    int carry = 0;
-    for (int i = mx - 1; i >= 0; i--)
-    {
-        int sum = (a[i] - '0') - (b[i] - '0') - carry;
-        
-        if (sum < 0)
-        {
-            sum += n;
-            carry = 1;
-        }
-        else
-        {
-            carry = 0;
-        }
-        
-        result += (sum + '0');
-    }
-    
-    while (result.empty() == false)
-    {
-        if (result.back() != '0')
-        {
-            break;
-        }
-        
-        result.pop_back();
-    }
-    
-    reverse(result.begin(), result.end());
-    
-    return result.empty() ? "0" : result;
+
+    return result;
 }
 
-vector<string> solution(vector<string> expressions)
+string to_base(int number, int base) 
+{
+    if (number == 0)
+    {
+        return "0";
+    }
+
+    string result = "";
+    while (number > 0) 
+    {
+        result = char('0' + number % base) + result;
+        number /= base;
+    }
+
+    return result;
+}
+
+bool is_valid(int number, int base) 
+{
+    while (number > 0) 
+    {
+        if (number % 10 >= base)
+        {
+            return false;
+        }
+
+        number /= 10;
+    }
+
+    return true;
+}
+
+vector<string> solution(vector<string> expressions) 
 {
     vector<string> answer;
-    
-    int mx = 2;
-    vector<vector<string>> v;
-    vector<vector<string>> w;
-    for (int i = 0; i < (int)expressions.size(); i++)
-    {
-        for (int j = 0; j < (int)expressions[i].length(); j++)
-        {
-            if ('0' <= expressions[i][j] && expressions[i][j] <= '9')
-            {
-                mx = max(mx, (expressions[i][j] - '0') + 1);
-            }
-        }
-        
-        if (expressions[i].back() != 'X')
-        {
-            v.push_back(split(expressions[i], " "));
-        }
-        else
-        {
-            w.push_back(split(expressions[i], " "));
-        }
-    }
-    
-    set<int> s;
-    for (int i = mx; i < 10; i++)
-    {
-        s.insert(i);
-    }
-    
-    for (int i = mx; i < 10; i++)
-    {
-        for (const auto& j: v)
-        {
-            bool check;
-            switch(j[1][0])
-            {
-                case '+':
-                    check = add(j[0], j[2], i) != j[4];
-                    break;
-                case '-':
-                    check = substract(j[0], j[2], i) != j[4];
-                    break;
-            }
 
-            if (check && s.find(i) != s.end())
-            {
-                s.erase(i);
-            }
+    vector<Expression> caches;
+    int min = 2;
+
+    for (const string& expression: expressions) 
+    {
+        istringstream stream(expression);
+        string a, op, b, eq, c;
+        stream >> a >> op >> b >> eq >> c;
+        
+        Expression cache;
+        cache.a = stoi(a);
+        cache.op = op[0];
+        cache.b = stoi(b);
+        cache.unknown = (c == "X");
+        cache.c = cache.unknown ? 0 : stoi(c);
+        cache.original = expression;
+        
+        caches.push_back(cache);
+        
+        min = max(min, get_maximum_digit(a) + 1);
+        min = max(min, get_maximum_digit(b) + 1);
+        if (cache.unknown == false) 
+        {
+            min = max(min, get_maximum_digit(c) + 1);
         }
     }
     
-    set<string> cache;
-    for (auto& i: w)
+    set<int> candidates;
+    for (int base = min; base <= 9; base++) 
     {
-        for (auto it = s.begin(); it != s.end(); it++)
+        candidates.insert(base);
+    }
+    
+    for (const Expression& cache: caches) 
+    {
+        if (cache.unknown) continue;
+        
+        set<int> bases;
+        for (int base : candidates) 
         {
-            switch(i[1][0])
+            if (is_valid(cache.a, base) == false || is_valid(cache.b, base) == false || is_valid(cache.c, base) == false)
             {
-                case '+':
-                    cache.insert(add(i[0], i[2], *it));
-                    break;
-                case '-':
-                    cache.insert(substract(i[0], i[2], *it));
-                    break;
+                continue;
+            }
+            
+            int a = to_decimal(cache.a, base);
+            int b = to_decimal(cache.b, base);
+            int c = to_decimal(cache.c, base);
+            
+            int result = (cache.op == '+') ? (a + b) : (a - b);
+            if (result == c)
+            {
+                bases.insert(base);
             }
         }
         
-        i[4] = ((int)cache.size() > 1 ? "?" : *cache.begin());
+        candidates = bases;
+    }
+    
+    for (const Expression& cache : caches) 
+    {
+        if (cache.unknown == false)
+        {
+            continue;
+        }
         
-        answer.push_back(combine(i));
-        
-        cache.clear();
+        set<string> results;
+        for (int base : candidates) 
+        {
+            if (is_valid(cache.a, base) == false || is_valid(cache.b, base) == false)
+            {
+                continue;
+            }
+            
+            int a = to_decimal(cache.a, base);
+            int b = to_decimal(cache.b, base);
+            int result = (cache.op == '+') ? (a + b) : (a - b);
+            
+            if (result < 0)
+            {
+                continue;
+            }
+            
+            results.insert(to_base(result, base));
+        }
+
+        string y = (int)results.size() == 1 ? *results.begin() : "?";
+        string expression = to_string(cache.a) + " " + cache.op + " " + to_string(cache.b) + " = " + y;
+        answer.push_back(expression);
     }
     
     return answer;
@@ -212,7 +185,7 @@ int main()
         vector<string> expression(5);
         cin >> expression[0] >> expression[1] >> expression[2] >> expression[3] >> expression[4];
 
-        expressions.push_back(combine(expression));
+        expressions.push_back(expression[0] + " " + expression[1] + " " + expression[2] + " " + expression[3] + " " + expression[4]);
     }
 
     vector<string> answer = solution(expressions);
@@ -221,4 +194,6 @@ int main()
     {
         cout << i << '\n';
     }
+
+    return 0;
 }
