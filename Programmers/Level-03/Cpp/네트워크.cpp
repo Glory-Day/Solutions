@@ -1,57 +1,75 @@
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <utility>
+#include <functional>
 
 using namespace std;
 
-typedef pair<int, int> pii;
-
-int solution(int n, vector<vector<int>> computers) {
+int solution(int n, vector<vector<int>> computers)
+{
     int answer = 0;
 
-    for (int i = 0, j = 0; i < n; i++, j++) {
-        if (computers[i][j]) {
-            answer++;
-            
-            queue<int> q;
-            q.push(i);
-            while (!q.empty()) {
-                int nd = q.front();
-                q.pop();
+    vector<int> parent(n);
 
-                if (!computers[nd][nd]) continue;
+    function<int(int)> find = [&](int x)
+    {
+        return parent[x] == x ? parent[x] : parent[x] = find(parent[x]);
+    };
 
-                computers[nd][nd] = 0;
-                for (int nnd = 0; nnd < n; nnd++) {
-                    if (computers[nd][nnd]) {
-                        computers[nd][nnd] = 0;
-                        q.push(nnd);
-                    }
-                }
+    auto unite = [&](int a, int b)
+    {
+        a = find(a);
+        b = find(b);
+
+        if (a != b)
+        {
+            parent[b] = a;
+        }
+    };
+
+    for (int i = 0; i < n; i++)
+    {
+        parent[i] = i;
+    }
+    
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (computers[i][j] == 1)
+            {
+                unite(i, j);
             }
         }
     }
-
+    
+    for (int i = 0; i < n; i++)
+    {
+        if (find(i) == i)
+        {
+            answer++;
+        }
+    }
+    
     return answer;
 }
 
-int main() {
+int main()
+{
     int n;
     cin >> n;
 
-    vector<vector<int>> computers;
-    for (int i = 0; i < n; i++) {
-        vector<int> temp;
-        for (int j = 0; j < n; j++) {
-            int input;
-            cin >> input;
-            temp.push_back(input);
+    vector<vector<int>> computers(n, vector<int>(n));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cin >> computers[i][j];
         }
-        computers.push_back(temp);
     }
 
     int answer = solution(n, computers);
 
-    cout << answer;
+    cout << answer << '\n';
+
+    return 0;
 }
