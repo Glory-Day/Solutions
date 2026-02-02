@@ -1,58 +1,57 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <map>
+#include <set>
+#include <sstream>
 
 using namespace std;
 
-vector<int> solution(vector<string> operations) {
+vector<int> solution(vector<string> operations)
+{
     vector<int> answer;
 
-    map<int, int> mp;
-    for(string& i: operations) {
-        int v = stoi(i.substr(2));
-
-        if (i[0] == 'I') {
-            if (mp.find(v) != mp.end()) mp[v]++;
-            else mp[v] = 0;
+    multiset<int> caches;
+    
+    for (const string& operation : operations)
+    {
+        char command = operation[0];
+        int number = stoi(operation.substr(2));
+        
+        if (command == 'I')
+        {
+            caches.insert(number);
         }
-        else if (i[0] == 'D' && !mp.empty()) {
-            map<int, int>::iterator it;
-
-            if (v == -1) it = mp.begin();
-            else it = --mp.end();
-
-            if ((*it).second == 0) mp.erase(it);
-            else (*it).second--;
+        else if (command == 'D' && caches.empty() == false)
+        {
+            caches.erase(number == 1 ? prev(caches.end()) : caches.begin());
         }
     }
-
-    vector<int> arr;
-    for (auto it = mp.begin(); it != mp.end(); it++) {
-        for (int i = 0; i <= (*it).second; i++) {
-            arr.push_back((*it).first);
-        }
+    
+    if (caches.empty())
+    {
+        return { 0,0 };
     }
-
-    if (arr.empty()) answer = { 0,0 };
-    else answer = { arr.back(),arr.front() };
+    
+    answer = { *caches.rbegin(),*caches.begin() };
 
     return answer;
 }
 
-int main() {
+int main()
+{
     int n;
     cin >> n;
     cin.ignore();
 
-    vector<string> operations;
-    for (int i = 0; i < n; i++) {
-        string input;
-        getline(cin, input);
-        operations.push_back(input);
+    vector<string> operations(n);
+    for (int i = 0; i < n; i++)
+    {
+        getline(cin, operations[i]);
     }
 
     vector<int> answer = solution(operations);
 
-    cout << answer[0] << ' ' << answer[1];
+    cout << answer[0] << ' ' << answer[1] << '\n';
+
+    return 0;
 }
